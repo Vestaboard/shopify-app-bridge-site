@@ -1,0 +1,27 @@
+# Copyright 2023 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+runtime: nodejs
+env: flex
+runtime_config:
+  operating_system: ubuntu22
+  runtime_version: 20
+beta_settings:
+  cloud_sql_instances: vestaboard-installables:us-east1:vestaboard-installables=tcp:3306
+env_variables:
+  SHOPIFY_APP_URL: "https://vestaboard-installables.ue.r.appspot.com"
+  SHOPIFY_API_KEY: "abd2bdb7d6c9b365365f01e24f4dc568"
+  SHOPIFY_API_SECRET: "42a456c30b4cf817f1f9c62a88761338"
+  SCOPES: "read_orders,read_all_orders,read_products,read_customers,read_shipping,read_analytics"
+  DATABASE_URL: "mysql://root:ssOsumdOehpnnJPF@172.17.0.1:3306/shopify_vestaboard_app_bridge"

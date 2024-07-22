@@ -1,0 +1,36 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "abd2bdb7d6c9b365365f01e24f4dc568"
+name = "Vestaboard"
+handle = "vestaboard"
+application_url = "https://barry-vol-delaware-started.trycloudflare.com/"
+embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "quickstart-17e82b32.myshopify.com"
+
+[auth]
+redirect_urls = [
+  "https://barry-vol-delaware-started.trycloudflare.com/auth/callback",
+  "https://barry-vol-delaware-started.trycloudflare.com/auth/shopify/callback",
+  "https://barry-vol-delaware-started.trycloudflare.com/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2023-07"
+
+  [[webhooks.subscriptions]]
+  uri = "https://f31e349e.installables.vbrd.net/api/shopify/events/customers_data_request"
+  compliance_topics = [ "customers/data_request" ]
+
+  [[webhooks.subscriptions]]
+  uri = "https://f31e349e.installables.vbrd.net/api/shopify/events/customers_redact"
+  compliance_topics = [ "customers/redact" ]
+
+  [[webhooks.subscriptions]]
+  uri = "https://f31e349e.installables.vbrd.net/api/shopify/events/shop_redact"
+  compliance_topics = [ "shop/redact" ]
+
+[pos]
+embedded = false
