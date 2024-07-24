@@ -1,4 +1,4 @@
-# Shopify App Template - Remix
+# Shopify App Bridge for Vestaboard - Remix 2.7.x #
 
 This is a template for building a [Shopify app](https://shopify.dev/docs/apps/getting-started) using the [Remix](https://remix.run) framework.
 
@@ -6,7 +6,59 @@ Rather than cloning this repo, you can use your preferred package manager and th
 
 Visit the [`shopify.dev` documentation](https://shopify.dev/docs/api/shopify-app-remix) for more details on the Remix app package.
 
-## Quick start
+## Production Environment ##
+
+### MySQL Database ###
+
+The production website connects to a MySQL 8.0.18 database at: 
+
+    Host: 10.67.80.3
+    Port: 3306
+    Username: root
+    Password: ssOsumdOehpnnJPF
+    Database: shopify_vestaboard_app_bridge
+
+To connect to MySQL at the command line, first start the Google SQL Cloud Proxy (install 
+if needed at https://cloud.google.com/sql/docs/mysql/sql-proxy ):
+    
+    cloud_sql_proxy --port 33306 vestaboard-installables:us-east1:vestaboard-installables
+
+Then connect normally using the mysql CLI (note use of port 33306):
+    
+    mysql -h 127.0.0.1 -P 33306 -u root -pssOsumdOehpnnJPF -D shopify_vestaboard_app_bridge
+
+### Connecting Via SSH ###
+
+At present this is multiple steps:
+
+1. First, get a list of GAE Flexible machine instances running by visiting App Engine > Instances, or the URL:
+
+  * https://console.cloud.google.com/appengine/instances?serviceId=default&project=vestaboard-installables
+
+2. Next, click the down arrow beside the SSH option and choose "View gcloud command". Copy and run the command on 
+   your CLI.
+
+3. Once SSHed into the GAE Flexible instance, run this CLI command to SSH into the Docker instance of the app:
+      
+      sudo docker exec -it gaeapp /bin/bash
+
+You are now connected and inside the GAE app that was deployed. See the documentation at https://cloud.google.com/appengine/docs/flexible/debugging-an-instance 
+for more information.
+
+### Logging ###
+
+To "tail" logs in real time, run the CLI command:
+
+    gcloud app logs tail -s default
+
+### Deploying ###
+
+To deploy a new version of the site, run the command:
+
+    gcloud app deploy
+
+
+## Quick Start ##
 
 ### Prerequisites
 
@@ -173,6 +225,25 @@ export default defineConfig({
 
 ## Gotchas / Troubleshooting
 
+### I Want To Start Development On A Local Webserver ###
+
+First, make sure to switch to non-production Shopify app settings; run the command:
+
+    npm run config:use local
+
+This will make use of the settings file **shopify.app.local.toml**, which can be safely overwritten as needed (as 
+opposed to **shopify.app.production.toml**). 
+
+Next, boot up the self-contained local development webserver:
+
+    npm run dev
+
+### I Need To Rebuild My Database Locally ###
+
+To wipe and rebuild all tables in your local development environment, run the command:
+
+    npm run prisma migrate dev
+
 ### Database tables don't exist
 
 If you get this error:
@@ -277,36 +348,6 @@ By default the CLI uses a cloudflare tunnel. Unfortunately it cloudflare tunnels
 
 This will not affect production, since tunnels are only for local development.
 
-### Using MongoDB and Prisma
-
-By default this template uses SQLlite as the database. It is recommended to move to a persisted database for production. If you choose to use MongoDB, you will need to make some modifications to the schema and prisma configuration. For more information please see the [Prisma MongoDB documentation](https://www.prisma.io/docs/orm/overview/databases/mongodb).
-
-Alternatively  you can use a MongDB database directly with the [MongoDB session storage adapter](https://github.com/Shopify/shopify-app-js/tree/main/packages/apps/session-storage/shopify-app-session-storage-mongodb).
-
-#### Mapping the id field
-In MongoDB, an ID must be a single field that defines an @id attribute and a @map("_id") attribute.
-The prisma adapter expects the ID field to be the ID of the session, and not the _id field of the document.
-
-To make this work you can add a new field to the schema that maps the _id field to the id field. For more information see the [Prisma documentation](https://www.prisma.io/docs/orm/prisma-schema/data-model/models#defining-an-id-field)
-
-```prisma
-model Session {
-  session_id  String    @id @default(auto()) @map("_id") @db.ObjectId
-  id          String    @unique
-...
-}
-```
-
-####  Error: The "mongodb" provider is not supported with this command
-MongoDB does not support the [prisma migrate](https://www.prisma.io/docs/orm/prisma-migrate/understanding-prisma-migrate/overview) command. Instead, you can use the [prisma db push](https://www.prisma.io/docs/orm/reference/prisma-cli-reference#db-push) command and update the `shopify.web.toml` file with the following commands. If you are using MongoDB please see the [Prisma documentation](https://www.prisma.io/docs/orm/overview/databases/mongodb) for more information. 
-```toml
-[commands]
-predev = "npx prisma generate && npx prisma db push"
-dev = "npm exec remix vite:dev"
-```
-
-#### Prisma needs to perform transactions, which requires your mongodb server to be run as a replica set
-See the [Prisma documentation](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/mongodb/connect-your-database-node-mongodb) for connecting to a MongoDB database.
 
 ## Benefits
 
