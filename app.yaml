@@ -17,6 +17,12 @@ env: flex
 runtime_config:
   operating_system: ubuntu22
   runtime_version: 20
+manual_scaling:
+  instances: 1
+resources:
+  cpu: 1
+  memory_gb: 0.5
+  disk_size_gb: 10
 beta_settings:
   cloud_sql_instances: vestaboard-installables:us-east1:vestaboard-installables=tcp:3306
 env_variables:
