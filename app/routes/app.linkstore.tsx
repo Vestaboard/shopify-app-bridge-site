@@ -1,4 +1,6 @@
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
+import { useActionData } from "@remix-run/react";
 import {
   Box,
   Card,
@@ -39,17 +41,26 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   let auth_code = formData.auth_code;
 
   // Call our Vestaboard Installables Shopify API and provide the shop_domain and auth_code values.
-  let str_url_vestaboard_installables = "http://local-vestaboard.pumpinglemma.net/api/shopify/link-store/" + shop_domain + "/auth-code/" + auth_code;
-  console.log('Calling: ' + str_url_vestaboard_installables);
-  let res_vestaboard_installables = await fetch(str_url_vestaboard_installables);
+  // Reference: https://stackoverflow.com/questions/50046841/proper-way-to-make-api-fetch-post-with-async-await
+  let str_url_vestaboard_installables = process.env.INSTALLABLES_API_DOMAIN + "/api/shopify/link-store";
+  const settings = {
+      method: 'POST',
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+      }, 
+      body: JSON.stringify({ 'shop_name': shop_domain, 'auth_code': auth_code }), 
+  };
+  let res_vestaboard_installables = await fetch(str_url_vestaboard_installables, settings);
   const obj_vestaboard_installables_response = await res_vestaboard_installables.json();
-
-  console.log(obj_vestaboard_installables_response);
 
   return json(obj_vestaboard_installables_response);
 };
 
 export default function LinkStore() {
+  const obj_vestaboard_installables_response = useActionData<typeof action>();
+  console.log(obj_vestaboard_installables_response);
+
   return (
     <Page>
       <TitleBar title="Additional page" />

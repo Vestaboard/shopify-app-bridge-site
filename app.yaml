@@ -31,3 +31,4 @@ env_variables:
   SHOPIFY_API_SECRET: "42a456c30b4cf817f1f9c62a88761338"
   SCOPES: "read_orders,read_all_orders,read_products,read_customers,read_shipping,read_analytics"
   DATABASE_URL: "mysql://root:ssOsumdOehpnnJPF@172.17.0.1:3306/shopify_vestaboard_app_bridge"
+  INSTALLABLES_API_DOMAIN: "https://f31e349e.installables.vbrd.net"
