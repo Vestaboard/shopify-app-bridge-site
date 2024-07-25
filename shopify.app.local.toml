@@ -3,7 +3,7 @@
 client_id = "abd2bdb7d6c9b365365f01e24f4dc568"
 name = "Vestaboard"
 handle = "vestaboard"
-application_url = "https://barry-vol-delaware-started.trycloudflare.com/"
+application_url = "https://california-consoles-ns-volvo.trycloudflare.com"
 embedded = true
 
 [build]
@@ -12,9 +12,9 @@ dev_store_url = "quickstart-17e82b32.myshopify.com"
 
 [auth]
 redirect_urls = [
-  "https://barry-vol-delaware-started.trycloudflare.com/auth/callback",
-  "https://barry-vol-delaware-started.trycloudflare.com/auth/shopify/callback",
-  "https://barry-vol-delaware-started.trycloudflare.com/api/auth/callback"
+  "https://california-consoles-ns-volvo.trycloudflare.com/auth/callback",
+  "https://california-consoles-ns-volvo.trycloudflare.com/auth/shopify/callback",
+  "https://california-consoles-ns-volvo.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
