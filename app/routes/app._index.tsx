@@ -7,13 +7,16 @@ import {
   Layout,
   Text,
   Card,
+  Checkbox,
   Button,
   BlockStack,
   Box,
   List,
   Link,
+  InlineGrid,
   InlineStack,
-  TextField
+  Select,
+  TextField,
 } from "@shopify/polaris";
 import { TitleBar, useAppBridge } from "@shopify/app-bridge-react";
 import { getSessionTokenHeader, getSessionTokenFromUrlParam } from '@shopify/app-bridge-remix';
@@ -108,6 +111,8 @@ export default function Index() {
     );
   }
   else {
+    const [frequencyValue, setFrequencyValue] = useState('3600');
+
     return (
       <Page>
         <TitleBar title="Settings" />
@@ -119,12 +124,62 @@ export default function Index() {
                   <BlockStack gap="500">
                     <BlockStack gap="200">
                       <Text as="h3" variant="headingMd">
-                        Settings
+                        To Date Summaries
                       </Text>
 
                       <Text as="p" variant="bodyMd">
-                        You're all set up!
+                        Choose the sales summaries you'd like to display on your Vestaboard by checking one or more of the options found below.
                       </Text>
+
+                      <InlineGrid gap="100" columns={4}>
+                        <Checkbox
+                          label="Today"
+                          checked={null}
+                          onChange={false}
+                        />
+
+                        <Checkbox
+                          label="This Week"
+                          checked={null}
+                          onChange={false}
+                        />
+
+                        <Checkbox
+                          label="This Month"
+                          checked={null}
+                          onChange={false}
+                        />
+
+                        <Checkbox
+                          label="This Year"
+                          checked={null}
+                          onChange={false}
+                        />
+                      </InlineGrid>
+                    </BlockStack>
+                    <BlockStack gap="200">
+                      <Text as="h3" variant="headingMd">
+                        Message Frequency
+                      </Text>
+
+                      <Text as="p" variant="bodyMd">
+                        Choose how often you'd like the <b>To Date Summaries</b> you've chosen to be displayed on your Vestaboard.
+                      </Text>
+
+                      <Select
+                        label="Repeat Every"
+                        options={[
+                          {label: '10 Minutes', value: '600'},
+                          {label: '20 Minutes', value: '1200'},
+                          {label: '30 Minutes', value: '1800'},
+                          {label: 'Hour', value: '3600'},
+                          {label: '2 Hours', value: '7200'},
+                          {label: '4 Hours', value: '14400'},
+                          {label: 'Day', value: '86400'},
+                        ]}
+                        onChange={setFrequencyValue}
+                        value={frequencyValue}
+                      />
                     </BlockStack>
                     <InlineStack gap="300">
                       <Button variant="primary" submit={true}>
