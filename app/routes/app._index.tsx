@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useState } from "react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData, useFetcher, Form } from "@remix-run/react";
+import { useLoaderData, useFetcher, useNavigate, Form } from "@remix-run/react";
 import {
   Page,
   Layout,
@@ -16,6 +16,7 @@ import {
   TextField
 } from "@shopify/polaris";
 import { TitleBar, useAppBridge } from "@shopify/app-bridge-react";
+import { getSessionTokenHeader, getSessionTokenFromUrlParam } from '@shopify/app-bridge-remix';
 import { PrismaClient } from '@prisma/client'
 import { authenticate } from "../shopify.server";
 
@@ -25,7 +26,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   // Set up a default ShopifyStore object to return.
   let obj_shopify_store_record = {
     shop: null,
-    authToken: null,
     isAuthorized: false,
   };
 
@@ -48,11 +48,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const getShopifyStore: object | null = await prisma.ShopifyStore.findUnique({
     where: {
       shop: shop_domain,
+      isAuthorized: true,
     },
   });
   if ( getShopifyStore != null ) {
     obj_shopify_store_record.shop = getShopifyStore.shop;
-    obj_shopify_store_record.authToken = getShopifyStore.authToken;
     obj_shopify_store_record.isAuthorized = getShopifyStore.isAuthorized;
   }
 
@@ -60,6 +60,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export default function Index() {
+  let navigate = useNavigate();
   const fetcher = useFetcher<typeof action>();
   const shopify = useAppBridge();
 
@@ -87,13 +88,13 @@ export default function Index() {
                       <Text as="p" variant="bodyMd">
                         To get started, make sure you've installed the{" "}
                         <Link url="https://web.vestaboard.com/marketplace-listing/9e5d78ae-bf14-46dd-bca9-60f43d9ee0fa/install?deeplink" target="_blank" removeUnderline>Shopify Stats channel</Link>{" "}
-                        on your Vestaboard. Once it's installed, you'll be provide with a 6-character Authorization Code to enter into the field below. 
+                        on your Vestaboard. Once it's installed, a 6-character Authorization Code will be displayed; enter that Authorization Code into the field below. 
                       </Text>
 
                       <TextField label="Authorization Code" name="auth_code" value={formState.auth_code} onChange={(value) => setFormState({ ...formState, auth_code: value })} autoComplete="off" error={authorizationCodeErrorState} />
                     </BlockStack>
                     <InlineStack gap="300">
-                      <Button submit={true}>
+                      <Button variant="primary" submit={true}>
                         Submit Authorization Code
                       </Button>
                     </InlineStack>
@@ -126,12 +127,32 @@ export default function Index() {
                       </Text>
                     </BlockStack>
                     <InlineStack gap="300">
-                      <Button submit={true}>
+                      <Button variant="primary" submit={true}>
                         Save Settings
                       </Button>
                     </InlineStack>
                   </BlockStack>
                 </Form>
+              </Card>
+            </Layout.Section>
+            <Layout.Section variant="oneThird">
+              <Card>
+                <BlockStack gap="500">
+                  <BlockStack gap="200">
+                    <Text as="h3" variant="headingMd">
+                      Disconnect From Vestaboard
+                    </Text>
+
+                    <Text as="p" variant="bodyMd">
+                      Want to change or disconnect from the Vestaboard smart messaging display you're currently connected to? Press the button below and we'll reset your settings.
+                    </Text>
+                  </BlockStack>
+                  <InlineStack gap="300">
+                    <Button variant="primary" tone="critical" onClick={() => navigate("/app/disconnectstore")}>
+                      Disconnect From Vestaboard
+                    </Button>
+                  </InlineStack>
+                </BlockStack>
               </Card>
             </Layout.Section>
           </Layout>

@@ -33,7 +33,6 @@ model Session {
 
 model ShopifyStore {
   shop          String    @id
-  authToken     String
   isAuthorized  Boolean?  @default(false)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
