@@ -9,6 +9,7 @@ embedded = true
 [build]
 automatically_update_urls_on_dev = true
 dev_store_url = "quickstart-17e82b32.myshopify.com"
+include_config_on_deploy = true
 
 [auth]
 redirect_urls = [
