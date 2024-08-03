@@ -110,20 +110,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return json(actionData);
   }
 
-  // Upsert a local MySQL database record so we're keeping track of the fact we're now fully authorized.
-  const upsertShopifyStore = await prisma.ShopifyStore.upsert({
-    where: {
-      shop: shop_domain,
-    },
-    update: {
-      isAuthorized: true,
-    },
-    create: {
-      shop: shop_domain,
-      isAuthorized: true,
-    },
-  });
-
   // Update our response object.
   actionData.success = true;
   actionData.page_title = 'Setup: Complete';

@@ -44,13 +44,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   let res_vestaboard_installables = await fetch(str_url_vestaboard_installables, obj_settings_vestaboard_installables);
   const obj_vestaboard_installables_response = await res_vestaboard_installables.json();
 
-  // Delete any local MySQL entries listing this shop.
-  const deleteShopifyStores = await prisma.ShopifyStore.deleteMany({
-    where: {
-      shop: shop_domain,
-    },
-  });
-
   // Prepare the JSON to be returned to the front-end from this server handler.
   var loaderData: LoaderData = {
     success: false,
@@ -66,7 +59,6 @@ export default function DisconnectStore() {
   let navigate = useNavigate();
 
   const obj_action_response = useLoaderData();
-  console.log(obj_action_response);
 
   return (
     <Page>
