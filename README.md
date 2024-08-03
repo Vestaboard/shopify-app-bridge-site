@@ -57,6 +57,14 @@ To deploy a new version of the site, run the command:
 
     gcloud app deploy
 
+Next, ensure that Shopify is pointing to the correct production settings/URLs:
+
+    shopify app config link
+
+And instruct Shopify to update to those new production settings and create a new version:
+
+    shopify app deploy
+
 
 ## Quick Start ##
 
