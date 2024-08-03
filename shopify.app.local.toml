@@ -3,18 +3,19 @@
 client_id = "abd2bdb7d6c9b365365f01e24f4dc568"
 name = "Vestaboard"
 handle = "vestaboard"
-application_url = "https://errors-bk-version-com.trycloudflare.com"
+application_url = "https://vestaboard-installables.ue.r.appspot.com/"
 embedded = true
 
 [build]
 automatically_update_urls_on_dev = true
 dev_store_url = "quickstart-17e82b32.myshopify.com"
+include_config_on_deploy = false
 
 [auth]
 redirect_urls = [
-  "https://errors-bk-version-com.trycloudflare.com/auth/callback",
-  "https://errors-bk-version-com.trycloudflare.com/auth/shopify/callback",
-  "https://errors-bk-version-com.trycloudflare.com/api/auth/callback"
+  "https://vestaboard-installables.ue.r.appspot.com/auth/callback",
+  "https://vestaboard-installables.ue.r.appspot.com/auth/shopify/callback",
+  "https://vestaboard-installables.ue.r.appspot.com/api/auth/callback"
 ]
 
 [webhooks]

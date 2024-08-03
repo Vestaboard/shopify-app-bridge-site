@@ -7,9 +7,9 @@ application_url = "https://vestaboard-installables.ue.r.appspot.com/"
 embedded = true
 
 [build]
-automatically_update_urls_on_dev = true
+automatically_update_urls_on_dev = false
 dev_store_url = "quickstart-17e82b32.myshopify.com"
-include_config_on_deploy = true
+include_config_on_deploy = false
 
 [auth]
 redirect_urls = [
