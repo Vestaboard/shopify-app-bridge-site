@@ -30,10 +30,3 @@ model Session {
   collaborator  Boolean?  @default(false)
   emailVerified Boolean?  @default(false)
 }
-
-model ShopifyStore {
-  shop          String    @id
-  isAuthorized  Boolean?  @default(false)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-}
