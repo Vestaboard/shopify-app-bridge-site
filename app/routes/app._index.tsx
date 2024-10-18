@@ -84,9 +84,32 @@ export default function Index() {
   const { obj_shopify_store_record } = useLoaderData();
   if ( obj_shopify_store_record.isAuthorized == true ) {
     const obj_additional_options = JSON.parse(obj_shopify_store_record.additionalOptions);
-    var arr_specific_times = JSON.parse(obj_additional_options.arr_specific_times);
-    if ( arr_specific_times.length == 0 ) {
+
+    //console.log('app._index.tsx::Index(): obj_additional_options = ' + obj_shopify_store_record.additionalOptions);
+
+    if ( typeof obj_additional_options.interval_update_secs == 'undefined' ) {
+      obj_additional_options.interval_update_secs = '86400';
       obj_additional_options.arr_specific_times = '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"12\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]';
+    }
+    if ( obj_additional_options.interval_update_secs == '86400' ) {
+      if ( typeof obj_additional_options.arr_specific_times != 'undefined' ) {
+        var arr_specific_times = JSON.parse(obj_additional_options.arr_specific_times);
+        if ( arr_specific_times.length == 0 ) {
+          obj_additional_options.arr_specific_times = '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"12\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]';
+        }
+      }
+      else {
+        obj_additional_options.arr_specific_times = '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"12\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]';
+      }
+    }
+    else {
+      obj_additional_options.arr_specific_times = '[]';
+      if ( typeof obj_additional_options.interval_starting_at_time == 'undefined' ) {
+        obj_additional_options.interval_starting_at_time = '10:00';
+      }
+      if ( typeof obj_additional_options.interval_ending_at_time == 'undefined' ) {
+        obj_additional_options.interval_ending_at_time = '18:00';
+      }
     }
 
     // Form settings values
@@ -94,8 +117,122 @@ export default function Index() {
     const [salesSummaryWeekValue, setSalesSummaryWeekValue] = useState((obj_additional_options.display_week_to_date_progress == '1') ? true : false);
     const [salesSummaryMonthValue, setSalesSummaryMonthValue] = useState((obj_additional_options.display_month_to_date_progress == '1') ? true : false);
     const [salesSummaryYearValue, setSalesSummaryYearValue] = useState((obj_additional_options.display_year_to_date_progress == '1') ? true : false);
+    const [intervalValue, setIntervalValue] = useState(obj_additional_options.interval_update_secs);
+    const [startAtValue, setStartAtValue] = useState(obj_additional_options.interval_starting_at_time);
+    const [endAtValue, setEndAtValue] = useState(obj_additional_options.interval_ending_at_time);
     const [frequencyTimeValue, setFrequencyTimeValue] = useState(obj_additional_options.arr_specific_times);
     const [displayOrderPlacedValue, setDisplayOrderPlacedValue] = useState((obj_additional_options.display_order_placed == '1') ? true : false);
+
+    const renderIntervalFields = () => {
+      if ( intervalValue == '86400' ) {
+        return (
+          <>
+            <Select
+              label="Every Day At"
+              options={[
+                {label: '12:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"12\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
+                {label: '1:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"01\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
+                {label: '2:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"02\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
+                {label: '3:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"03\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
+                {label: '4:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"04\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
+                {label: '5:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"05\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
+                {label: '6:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"06\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
+                {label: '7:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"07\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
+                {label: '8:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"08\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
+                {label: '9:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"09\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
+                {label: '10:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"10\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
+                {label: '11:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"11\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
+                {label: '12:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"12\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
+                {label: '1:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"01\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
+                {label: '2:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"02\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
+                {label: '3:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"03\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
+                {label: '4:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"04\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
+                {label: '5:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"05\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
+                {label: '6:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"06\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
+                {label: '7:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"07\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
+                {label: '8:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"08\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
+                {label: '9:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"09\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
+                {label: '10:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"10\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
+                {label: '11:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"11\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
+              ]}
+              onChange={setFrequencyTimeValue}
+              value={frequencyTimeValue}
+            />
+          </>
+        );
+      }
+      else {
+        return (
+          <>
+            <InlineGrid gap="100" columns={2}>
+              <Select
+                label="Start At"
+                options={[
+                  {label: '12:00 AM', value: '00:00'},
+                  {label: '1:00 AM', value: '01:00'},
+                  {label: '2:00 AM', value: '02:00'},
+                  {label: '3:00 AM', value: '03:00'},
+                  {label: '4:00 AM', value: '04:00'},
+                  {label: '5:00 AM', value: '05:00'},
+                  {label: '6:00 AM', value: '06:00'},
+                  {label: '7:00 AM', value: '07:00'},
+                  {label: '8:00 AM', value: '08:00'},
+                  {label: '9:00 AM', value: '09:00'},
+                  {label: '10:00 AM', value: '10:00'},
+                  {label: '11:00 AM', value: '11:00'},
+                  {label: '12:00 PM', value: '12:00'},
+                  {label: '1:00 PM', value: '13:00'},
+                  {label: '2:00 PM', value: '14:00'},
+                  {label: '3:00 PM', value: '15:00'},
+                  {label: '4:00 PM', value: '16:00'},
+                  {label: '5:00 PM', value: '17:00'},
+                  {label: '6:00 PM', value: '18:00'},
+                  {label: '7:00 PM', value: '19:00'},
+                  {label: '8:00 PM', value: '20:00'},
+                  {label: '9:00 PM', value: '21:00'},
+                  {label: '10:00 PM', value: '22:00'},
+                  {label: '11:00 PM', value: '23:00'},
+                ]}
+                onChange={setStartAtValue}
+                value={startAtValue}
+              />
+
+              <Select
+                label="End At"
+                options={[
+                  {label: '12:00 AM', value: '00:00'},
+                  {label: '1:00 AM', value: '01:00'},
+                  {label: '2:00 AM', value: '02:00'},
+                  {label: '3:00 AM', value: '03:00'},
+                  {label: '4:00 AM', value: '04:00'},
+                  {label: '5:00 AM', value: '05:00'},
+                  {label: '6:00 AM', value: '06:00'},
+                  {label: '7:00 AM', value: '07:00'},
+                  {label: '8:00 AM', value: '08:00'},
+                  {label: '9:00 AM', value: '09:00'},
+                  {label: '10:00 AM', value: '10:00'},
+                  {label: '11:00 AM', value: '11:00'},
+                  {label: '12:00 PM', value: '12:00'},
+                  {label: '1:00 PM', value: '13:00'},
+                  {label: '2:00 PM', value: '14:00'},
+                  {label: '3:00 PM', value: '15:00'},
+                  {label: '4:00 PM', value: '16:00'},
+                  {label: '5:00 PM', value: '17:00'},
+                  {label: '6:00 PM', value: '18:00'},
+                  {label: '7:00 PM', value: '19:00'},
+                  {label: '8:00 PM', value: '20:00'},
+                  {label: '9:00 PM', value: '21:00'},
+                  {label: '10:00 PM', value: '22:00'},
+                  {label: '11:00 PM', value: '23:00'},
+                ]}
+                onChange={setEndAtValue}
+                value={endAtValue}
+              />
+            </InlineGrid>
+          </>
+        );
+      }
+    };
 
     const handleClickSaveChanges = async () => {
       var str_body = "";
@@ -104,10 +241,15 @@ export default function Index() {
       arr_body.push("display_week_to_date_progress" + "=" + ((salesSummaryWeekValue == true) ? '1' : '0'));
       arr_body.push("display_month_to_date_progress" + "=" + ((salesSummaryMonthValue == true) ? '1' : '0'));
       arr_body.push("display_year_to_date_progress" + "=" + ((salesSummaryYearValue == true) ? '1' : '0'));
-      arr_body.push("interval_update_secs" + "=" + '86400');
-      arr_body.push("interval_starting_at_time" + "=" + '00:00');
-      arr_body.push("interval_ending_at_time" + "=" + '00:00');
-      arr_body.push("arr_specific_times" + "=" + frequencyTimeValue);
+      arr_body.push("interval_update_secs" + "=" + intervalValue);
+      if ( intervalValue == '86400' ) {
+        arr_body.push("arr_specific_times" + "=" + frequencyTimeValue);        
+      }
+      else {
+        arr_body.push("interval_starting_at_time" + "=" + startAtValue);
+        arr_body.push("interval_ending_at_time" + "=" + endAtValue);
+        arr_body.push("arr_specific_times" + "=" + '[]');        
+      }
       arr_body.push("display_order_placed" + "=" + ((displayOrderPlacedValue == true) ? '1' : '0'));
       str_body = arr_body.join("&");
 
@@ -183,36 +325,22 @@ export default function Index() {
                       </Text>
 
                       <Select
-                        label="Every Day At"
+                        label="Repeat Every"
                         options={[
-                          {label: '12:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"12\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
-                          {label: '1:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"01\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
-                          {label: '2:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"02\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
-                          {label: '3:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"03\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
-                          {label: '4:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"04\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
-                          {label: '5:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"05\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
-                          {label: '6:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"06\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
-                          {label: '7:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"07\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
-                          {label: '8:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"08\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
-                          {label: '9:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"09\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
-                          {label: '10:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"10\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
-                          {label: '11:00 AM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"11\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]'},
-                          {label: '12:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"12\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
-                          {label: '1:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"01\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
-                          {label: '2:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"02\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
-                          {label: '3:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"03\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
-                          {label: '4:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"04\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
-                          {label: '5:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"05\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
-                          {label: '6:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"06\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
-                          {label: '7:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"07\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
-                          {label: '8:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"08\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
-                          {label: '9:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"09\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
-                          {label: '10:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"10\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
-                          {label: '11:00 PM', value: '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"11\",\"minutes\":\"00\",\"amPm\":\"PM\"}}]'},
+                          {label: '15 Minutes', value: '900'},
+                          {label: '30 Minutes', value: '1800'},
+                          {label: 'Hour', value: '3600'},
+                          {label: '2 Hours', value: '7200'},
+                          {label: '4 Hours', value: '10800'},
+                          {label: 'Day', value: '86400'},
                         ]}
-                        onChange={setFrequencyTimeValue}
-                        value={frequencyTimeValue}
+                        onChange={setIntervalValue}
+                        value={intervalValue}
                       />
+
+                      {renderIntervalFields()}
+
+                      
                     </BlockStack>
                     <BlockStack gap="200">
                       <Text as="h3" variant="headingMd">
@@ -238,6 +366,29 @@ export default function Index() {
               </Card>
             </Layout.Section>
             <Layout.Section variant="oneThird">
+              <Card>
+                <BlockStack gap="500">
+                  <BlockStack gap="200">
+                    <Text as="h3" variant="headingMd">
+                      Manage in Vestaboard App
+                    </Text>
+
+                    <Text as="p" variant="bodyMd">
+                      Now that you're connected, you can also manage all of your display settings directly in the Vestaboard app.
+                    </Text>
+                  </BlockStack>
+                  <InlineStack gap="300">
+                    <Button variant="primary" tone="primary" onClick={() => window.open('https://web.vestaboard.com/marketplace-listing/9e5d78ae-bf14-46dd-bca9-60f43d9ee0fa/install?deeplink', '_blank')}>
+                      Manage In App
+                    </Button>
+                  </InlineStack>
+                </BlockStack>
+              </Card>
+
+              <BlockStack gap="500">
+                &nbsp;
+              </BlockStack>
+
               <Card>
                 <BlockStack gap="500">
                   <BlockStack gap="200">
