@@ -99,6 +99,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   let res_vestaboard_installables = await fetch(str_url_vestaboard_installables, obj_settings_vestaboard_installables);
   const obj_vestaboard_installables_response = await res_vestaboard_installables.json();
 
+  //console.log('app.linkstore.tsx::action(): str_url_vestaboard_installables = ' + str_url_vestaboard_installables);
+  //console.log('app.linkstore.tsx::action(): obj_settings_vestaboard_installables.body = ' + obj_settings_vestaboard_installables.body);
+  //console.log('app.linkstore.tsx::action(): obj_vestaboard_installables_response = ' + obj_vestaboard_installables_response);
+
   // Prepare the JSON to be returned to the front-end from this server handler.
   var actionData: ActionData = {
     success: false,
@@ -124,8 +128,8 @@ export default function LinkStore() {
 
   var obj_action_response = {
     success: false,
-    page_title: "FIXIT: Page Reload",
-    message: "This message is displayed if this page has been refreshed without FORM data being POSTed to it. We need to fix this by requiring a FORM POST or redirecting back to /app .",
+    page_title: "Setup: Error",
+    message: "Sorry, an error occurred. Click the button below to try again.",
     button_title: "Try Again",
   }
 
