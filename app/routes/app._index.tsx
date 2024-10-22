@@ -289,7 +289,7 @@ export default function Index() {
                     { label: '58', value: '58' },
                     { label: '59', value: '59' },
                   ]}
-                  onChange={(val) => setTimeValueWithCheck('startAt', 'ante', val)}
+                  onChange={(val) => setTimeValueWithCheck('startAt', 'minute', val)}
                   value={startAtMinuteValue}
                 />
 
@@ -299,7 +299,7 @@ export default function Index() {
                     {label: 'AM', value: 'AM'},
                     {label: 'PM', value: 'PM'},
                   ]}
-                  onChange={(val) => setTimeValueWithCheck('startAt', 'minute', val)}
+                  onChange={(val) => setTimeValueWithCheck('startAt', 'ante', val)}
                   value={startAtAnteValue}
                 />
               </InlineGrid>
