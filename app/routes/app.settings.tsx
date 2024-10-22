@@ -25,7 +25,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const obj_shopify_admin_response = await res_shopify_admin.json();
   let shop_domain = obj_shopify_admin_response.data.shop.myshopifyDomain;
 
-  //console.log('app.linkstore.tsx::action(): shop_domain = ' + shop_domain);
+  //console.log('app.settings.tsx::action(): shop_domain = ' + shop_domain);
 
   // Call our Vestaboard Installables Shopify API and provide the shop_domain and auth_code values.
   // Reference: https://stackoverflow.com/questions/50046841/proper-way-to-make-api-fetch-post-with-async-await
@@ -47,8 +47,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         'interval_ending_at_time': formData.interval_ending_at_time, 
         'arr_specific_times': formData.arr_specific_times, 
         'display_order_placed': formData.display_order_placed, 
+        'option_title': formData.option_title, 
       }), 
   };
+
+  //console.log('app.settings.tsx::action(): obj_settings_vestaboard_installables.body = ' + obj_settings_vestaboard_installables.body);
+
   let res_vestaboard_installables = await fetch(str_url_vestaboard_installables, obj_settings_vestaboard_installables);
   const obj_vestaboard_installables_response = await res_vestaboard_installables.json();
 

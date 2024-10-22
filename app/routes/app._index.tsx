@@ -101,6 +101,12 @@ export default function Index() {
       else {
         obj_additional_options.arr_specific_times = '[{\"label\":\"Time\",\"index\":0,\"time\":{\"hour\":\"12\",\"minutes\":\"00\",\"amPm\":\"AM\"}}]';
       }
+      if ( typeof obj_additional_options.interval_starting_at_time == 'undefined' ) {
+        obj_additional_options.interval_starting_at_time = '00:00';
+      }
+      if ( typeof obj_additional_options.interval_ending_at_time == 'undefined' ) {
+        obj_additional_options.interval_ending_at_time = '00:00';
+      }
     }
     else {
       obj_additional_options.arr_specific_times = '[]';
@@ -119,9 +125,42 @@ export default function Index() {
     const [salesSummaryYearValue, setSalesSummaryYearValue] = useState((obj_additional_options.display_year_to_date_progress == '1') ? true : false);
     const [intervalValue, setIntervalValue] = useState(obj_additional_options.interval_update_secs);
     const [startAtValue, setStartAtValue] = useState(obj_additional_options.interval_starting_at_time);
+    const [startAtHourValue, setStartAtHourValue] = useState(obj_additional_options.interval_starting_at_time_hour);
+    const [startAtMinuteValue, setStartAtMinuteValue] = useState(obj_additional_options.interval_starting_at_time_minute);
+    const [startAtAnteValue, setStartAtAnteValue] = useState(obj_additional_options.interval_starting_at_time_ante);
     const [endAtValue, setEndAtValue] = useState(obj_additional_options.interval_ending_at_time);
+    const [endAtHourValue, setEndAtHourValue] = useState(obj_additional_options.interval_ending_at_time_hour);
+    const [endAtMinuteValue, setEndAtMinuteValue] = useState(obj_additional_options.interval_ending_at_time_minute);
+    const [endAtAnteValue, setEndAtAnteValue] = useState(obj_additional_options.interval_ending_at_time_ante);
     const [frequencyTimeValue, setFrequencyTimeValue] = useState(obj_additional_options.arr_specific_times);
     const [displayOrderPlacedValue, setDisplayOrderPlacedValue] = useState((obj_additional_options.display_order_placed == '1') ? true : false);
+    const [titleValue, setTitleValue] = useState(obj_additional_options.option_title);
+
+    const setTimeValueWithCheck = (timeType, fieldName, val) => {
+      if ( timeType == 'startAt' ) {
+        if ( fieldName == 'hour' ) {
+          setStartAtHourValue(val);
+        }
+        if ( fieldName == 'minute' ) {
+          setStartAtMinuteValue(val);
+        }
+        if ( fieldName == 'ante' ) {
+          setStartAtAnteValue(val);
+        }
+      }
+
+      if ( timeType == 'endAt' ) {
+        if ( fieldName == 'hour' ) {
+          setEndAtHourValue(val);
+        }
+        if ( fieldName == 'minute' ) {
+          setEndAtMinuteValue(val);
+        }
+        if ( fieldName == 'ante' ) {
+          setEndAtAnteValue(val);
+        }
+      }
+    };
 
     const renderIntervalFields = () => {
       if ( intervalValue == '86400' ) {
@@ -165,69 +204,205 @@ export default function Index() {
         return (
           <>
             <InlineGrid gap="100" columns={2}>
-              <Select
-                label="Start At"
-                options={[
-                  {label: '12:00 AM', value: '00:00'},
-                  {label: '1:00 AM', value: '01:00'},
-                  {label: '2:00 AM', value: '02:00'},
-                  {label: '3:00 AM', value: '03:00'},
-                  {label: '4:00 AM', value: '04:00'},
-                  {label: '5:00 AM', value: '05:00'},
-                  {label: '6:00 AM', value: '06:00'},
-                  {label: '7:00 AM', value: '07:00'},
-                  {label: '8:00 AM', value: '08:00'},
-                  {label: '9:00 AM', value: '09:00'},
-                  {label: '10:00 AM', value: '10:00'},
-                  {label: '11:00 AM', value: '11:00'},
-                  {label: '12:00 PM', value: '12:00'},
-                  {label: '1:00 PM', value: '13:00'},
-                  {label: '2:00 PM', value: '14:00'},
-                  {label: '3:00 PM', value: '15:00'},
-                  {label: '4:00 PM', value: '16:00'},
-                  {label: '5:00 PM', value: '17:00'},
-                  {label: '6:00 PM', value: '18:00'},
-                  {label: '7:00 PM', value: '19:00'},
-                  {label: '8:00 PM', value: '20:00'},
-                  {label: '9:00 PM', value: '21:00'},
-                  {label: '10:00 PM', value: '22:00'},
-                  {label: '11:00 PM', value: '23:00'},
-                ]}
-                onChange={setStartAtValue}
-                value={startAtValue}
-              />
+              <InlineGrid gap="100" columns={3}>
+                <Select
+                  label="Start At"
+                  options={[
+                    {label: '12', value: '00'},
+                    {label: '1', value: '01'},
+                    {label: '2', value: '02'},
+                    {label: '3', value: '03'},
+                    {label: '4', value: '04'},
+                    {label: '5', value: '05'},
+                    {label: '6', value: '06'},
+                    {label: '7', value: '07'},
+                    {label: '8', value: '08'},
+                    {label: '9', value: '09'},
+                    {label: '10', value: '10'},
+                    {label: '11', value: '11'},
+                  ]}
+                  onChange={(val) => setTimeValueWithCheck('startAt', 'hour', val)}
+                  value={startAtHourValue}
+                />
 
-              <Select
-                label="End At"
-                options={[
-                  {label: '12:00 AM', value: '00:00'},
-                  {label: '1:00 AM', value: '01:00'},
-                  {label: '2:00 AM', value: '02:00'},
-                  {label: '3:00 AM', value: '03:00'},
-                  {label: '4:00 AM', value: '04:00'},
-                  {label: '5:00 AM', value: '05:00'},
-                  {label: '6:00 AM', value: '06:00'},
-                  {label: '7:00 AM', value: '07:00'},
-                  {label: '8:00 AM', value: '08:00'},
-                  {label: '9:00 AM', value: '09:00'},
-                  {label: '10:00 AM', value: '10:00'},
-                  {label: '11:00 AM', value: '11:00'},
-                  {label: '12:00 PM', value: '12:00'},
-                  {label: '1:00 PM', value: '13:00'},
-                  {label: '2:00 PM', value: '14:00'},
-                  {label: '3:00 PM', value: '15:00'},
-                  {label: '4:00 PM', value: '16:00'},
-                  {label: '5:00 PM', value: '17:00'},
-                  {label: '6:00 PM', value: '18:00'},
-                  {label: '7:00 PM', value: '19:00'},
-                  {label: '8:00 PM', value: '20:00'},
-                  {label: '9:00 PM', value: '21:00'},
-                  {label: '10:00 PM', value: '22:00'},
-                  {label: '11:00 PM', value: '23:00'},
-                ]}
-                onChange={setEndAtValue}
-                value={endAtValue}
-              />
+                <Select
+                  label="&nbsp;"
+                  options={[
+                    { label: '00', value: '00' },
+                    { label: '01', value: '01' },
+                    { label: '02', value: '02' },
+                    { label: '03', value: '03' },
+                    { label: '04', value: '04' },
+                    { label: '05', value: '05' },
+                    { label: '06', value: '06' },
+                    { label: '07', value: '07' },
+                    { label: '08', value: '08' },
+                    { label: '09', value: '09' },
+                    { label: '10', value: '10' },
+                    { label: '11', value: '11' },
+                    { label: '12', value: '12' },
+                    { label: '13', value: '13' },
+                    { label: '14', value: '14' },
+                    { label: '15', value: '15' },
+                    { label: '16', value: '16' },
+                    { label: '17', value: '17' },
+                    { label: '18', value: '18' },
+                    { label: '19', value: '19' },
+                    { label: '20', value: '20' },
+                    { label: '21', value: '21' },
+                    { label: '22', value: '22' },
+                    { label: '23', value: '23' },
+                    { label: '24', value: '24' },
+                    { label: '25', value: '25' },
+                    { label: '26', value: '26' },
+                    { label: '27', value: '27' },
+                    { label: '28', value: '28' },
+                    { label: '29', value: '29' },
+                    { label: '30', value: '30' },
+                    { label: '31', value: '31' },
+                    { label: '32', value: '32' },
+                    { label: '33', value: '33' },
+                    { label: '34', value: '34' },
+                    { label: '35', value: '35' },
+                    { label: '36', value: '36' },
+                    { label: '37', value: '37' },
+                    { label: '38', value: '38' },
+                    { label: '39', value: '39' },
+                    { label: '40', value: '40' },
+                    { label: '41', value: '41' },
+                    { label: '42', value: '42' },
+                    { label: '43', value: '43' },
+                    { label: '44', value: '44' },
+                    { label: '45', value: '45' },
+                    { label: '46', value: '46' },
+                    { label: '47', value: '47' },
+                    { label: '48', value: '48' },
+                    { label: '49', value: '49' },
+                    { label: '50', value: '50' },
+                    { label: '51', value: '51' },
+                    { label: '52', value: '52' },
+                    { label: '53', value: '53' },
+                    { label: '54', value: '54' },
+                    { label: '55', value: '55' },
+                    { label: '56', value: '56' },
+                    { label: '57', value: '57' },
+                    { label: '58', value: '58' },
+                    { label: '59', value: '59' },
+                  ]}
+                  onChange={(val) => setTimeValueWithCheck('startAt', 'ante', val)}
+                  value={startAtMinuteValue}
+                />
+
+                <Select
+                  label="&nbsp;"
+                  options={[
+                    {label: 'AM', value: 'AM'},
+                    {label: 'PM', value: 'PM'},
+                  ]}
+                  onChange={(val) => setTimeValueWithCheck('startAt', 'minute', val)}
+                  value={startAtAnteValue}
+                />
+              </InlineGrid>
+
+              <InlineGrid gap="100" columns={3}>
+                <Select
+                  label="End At"
+                  options={[
+                    {label: '12', value: '00'},
+                    {label: '1', value: '01'},
+                    {label: '2', value: '02'},
+                    {label: '3', value: '03'},
+                    {label: '4', value: '04'},
+                    {label: '5', value: '05'},
+                    {label: '6', value: '06'},
+                    {label: '7', value: '07'},
+                    {label: '8', value: '08'},
+                    {label: '9', value: '09'},
+                    {label: '10', value: '10'},
+                    {label: '11', value: '11'},
+                  ]}
+                  onChange={(val) => setTimeValueWithCheck('endAt', 'hour', val)}
+                  value={endAtHourValue}
+                />
+
+                <Select
+                  label="&nbsp;"
+                  options={[
+                    { label: '00', value: '00' },
+                    { label: '01', value: '01' },
+                    { label: '02', value: '02' },
+                    { label: '03', value: '03' },
+                    { label: '04', value: '04' },
+                    { label: '05', value: '05' },
+                    { label: '06', value: '06' },
+                    { label: '07', value: '07' },
+                    { label: '08', value: '08' },
+                    { label: '09', value: '09' },
+                    { label: '10', value: '10' },
+                    { label: '11', value: '11' },
+                    { label: '12', value: '12' },
+                    { label: '13', value: '13' },
+                    { label: '14', value: '14' },
+                    { label: '15', value: '15' },
+                    { label: '16', value: '16' },
+                    { label: '17', value: '17' },
+                    { label: '18', value: '18' },
+                    { label: '19', value: '19' },
+                    { label: '20', value: '20' },
+                    { label: '21', value: '21' },
+                    { label: '22', value: '22' },
+                    { label: '23', value: '23' },
+                    { label: '24', value: '24' },
+                    { label: '25', value: '25' },
+                    { label: '26', value: '26' },
+                    { label: '27', value: '27' },
+                    { label: '28', value: '28' },
+                    { label: '29', value: '29' },
+                    { label: '30', value: '30' },
+                    { label: '31', value: '31' },
+                    { label: '32', value: '32' },
+                    { label: '33', value: '33' },
+                    { label: '34', value: '34' },
+                    { label: '35', value: '35' },
+                    { label: '36', value: '36' },
+                    { label: '37', value: '37' },
+                    { label: '38', value: '38' },
+                    { label: '39', value: '39' },
+                    { label: '40', value: '40' },
+                    { label: '41', value: '41' },
+                    { label: '42', value: '42' },
+                    { label: '43', value: '43' },
+                    { label: '44', value: '44' },
+                    { label: '45', value: '45' },
+                    { label: '46', value: '46' },
+                    { label: '47', value: '47' },
+                    { label: '48', value: '48' },
+                    { label: '49', value: '49' },
+                    { label: '50', value: '50' },
+                    { label: '51', value: '51' },
+                    { label: '52', value: '52' },
+                    { label: '53', value: '53' },
+                    { label: '54', value: '54' },
+                    { label: '55', value: '55' },
+                    { label: '56', value: '56' },
+                    { label: '57', value: '57' },
+                    { label: '58', value: '58' },
+                    { label: '59', value: '59' },
+                  ]}
+                  onChange={(val) => setTimeValueWithCheck('endAt', 'minute', val)}
+                  value={endAtMinuteValue}
+                />
+
+                <Select
+                  label="&nbsp;"
+                  options={[
+                    {label: 'AM', value: 'AM'},
+                    {label: 'PM', value: 'PM'},
+                  ]}
+                  onChange={(val) => setTimeValueWithCheck('endAt', 'ante', val)}
+                  value={endAtAnteValue}
+                />
+              </InlineGrid>
             </InlineGrid>
           </>
         );
@@ -244,13 +419,24 @@ export default function Index() {
       arr_body.push("interval_update_secs" + "=" + intervalValue);
       if ( intervalValue == '86400' ) {
         arr_body.push("arr_specific_times" + "=" + frequencyTimeValue);        
+        arr_body.push("interval_starting_at_time" + "=" + '00:00');
+        arr_body.push("interval_ending_at_time" + "=" + '00:00');
       }
       else {
-        arr_body.push("interval_starting_at_time" + "=" + startAtValue);
-        arr_body.push("interval_ending_at_time" + "=" + endAtValue);
+        var str_interval_starting_at_time = startAtHourValue + ':' + startAtMinuteValue;
+        if ( startAtAnteValue == 'PM' ) {
+          str_interval_starting_at_time = (parseInt(startAtHourValue) + 12) + ':' + startAtMinuteValue;
+        }
+        var str_interval_ending_at_time = endAtHourValue + ':' + endAtMinuteValue;
+        if ( endAtAnteValue == 'PM' ) {
+          str_interval_ending_at_time = (parseInt(endAtHourValue) + 12) + ':' + endAtMinuteValue;
+        }
         arr_body.push("arr_specific_times" + "=" + '[]');        
+        arr_body.push("interval_starting_at_time" + "=" + str_interval_starting_at_time);
+        arr_body.push("interval_ending_at_time" + "=" + str_interval_ending_at_time);
       }
       arr_body.push("display_order_placed" + "=" + ((displayOrderPlacedValue == true) ? '1' : '0'));
+      arr_body.push("option_title" + "=" + titleValue);
       str_body = arr_body.join("&");
 
       const res = await fetch(`/app/settings`, {
@@ -289,7 +475,7 @@ export default function Index() {
                       </Text>
 
                       <Text as="p" variant="bodyMd">
-                        Choose the sales summaries you'd like to display on your Vestaboard by checking one or more of the options found below.
+                        Choose the sales summaries you'd like to display on your Vestaboard by checking one or more of the options found below, and set a title for the messages.
                       </Text>
 
                       <InlineGrid gap="100" columns={4}>
@@ -319,6 +505,11 @@ export default function Index() {
                         />
                       </InlineGrid>
                     </BlockStack>
+
+                    <BlockStack gap="200">
+                      <TextField label="Title" name="option_title" value={titleValue} onChange={setTitleValue} autoComplete="off" />
+                    </BlockStack>
+
                     <BlockStack gap="200">
                       <Text as="p" variant="bodyMd">
                         Next, choose how when you'd like these summaries to be displayed on your Vestaboard.
@@ -339,8 +530,6 @@ export default function Index() {
                       />
 
                       {renderIntervalFields()}
-
-                      
                     </BlockStack>
                     <BlockStack gap="200">
                       <Text as="h3" variant="headingMd">
