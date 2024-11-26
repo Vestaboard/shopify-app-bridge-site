@@ -17,6 +17,7 @@ import {
   InlineStack,
   Select,
   TextField,
+  Banner, 
 } from "@shopify/polaris";
 import { TitleBar, useAppBridge } from "@shopify/app-bridge-react";
 //import { getSessionTokenHeader, getSessionTokenFromUrlParam } from '@shopify/app-bridge-remix';
@@ -30,6 +31,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   let obj_shopify_store_record = {
     shop: null,
     isAuthorized: false,
+    numStoresLinked: 0,
     additionalOptions: '{}',
   };
 
@@ -68,6 +70,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   if ( obj_vestaboard_installables_response.success == 1 ) {
     obj_shopify_store_record.shop = shop_domain;
     obj_shopify_store_record.isAuthorized = true;
+    obj_shopify_store_record.numStoresLinked = obj_vestaboard_installables_response.num_stores_linked;
     obj_shopify_store_record.additionalOptions = obj_vestaboard_installables_response.additional_options;
   }
 
@@ -120,6 +123,7 @@ export default function Index() {
 
     const [formState, setFormState] = useState({});
     const [authorizationCodeErrorState, setAuthorizationCodeErrorState] = useState(false);
+    const [numStoresLinkedValue, setNumStoresLinkedValue] = useState(obj_shopify_store_record.numStoresLinked);
 
     // Form settings values
     const [salesSummaryTodayValue, setSalesSummaryTodayValue] = useState((obj_additional_options.display_daily_progress == '1') ? true : false);
@@ -163,6 +167,32 @@ export default function Index() {
           setEndAtAnteValue(val);
         }
       }
+    };
+
+    const renderMultipleVestaboardsFields = () => {
+        if ( numStoresLinkedValue >= 2 ) {
+            return (
+                <>
+                    <BlockStack gap="500">
+                        <Banner
+                          tone="warning"
+                          title="We've detected that multiple Vestaboards are connected to this Shopify store. To minimize confusion about what Vestaboard's settings are being modified, we recommend you manage settings in the Vestaboard app."
+                        >
+                        </Banner>
+                      </BlockStack>
+
+                      <BlockStack gap="500">
+                        &nbsp;
+                      </BlockStack>
+                </>
+            );
+        }
+        else {
+            return (
+                <>
+                </>
+            );
+        }
     };
 
     const renderIntervalFields = () => {
@@ -467,10 +497,13 @@ export default function Index() {
     return (
       <Page>
         <TitleBar title="Settings" />
+
         <BlockStack gap="500">
           <Layout>
             <Layout.Section>
               <Card>
+                  {renderMultipleVestaboardsFields()}
+
                   <BlockStack gap="500">
                     <BlockStack gap="200">
                       <Text as="h3" variant="headingMd">
