@@ -121,7 +121,7 @@ opposed to **shopify.app.production.toml**).
 
 Next, boot up the self-contained local development webserver:
 
-    npm run dev
+    npm run dev -- --config=local
 
 ### I Need To Rebuild My Database Locally ###
 
