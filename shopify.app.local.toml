@@ -1,9 +1,9 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "abd2bdb7d6c9b365365f01e24f4dc568"
-name = "Vestaboard"
-handle = "vestaboard"
-application_url = "https://vestaboard-installables.ue.r.appspot.com/"
+client_id = "b750bbe604f750a161307af85db83fd7"
+name = "Vestaboard (Dev)"
+handle = "vestaboard-dev"
+application_url = "https://completed-def-relevance-notify.trycloudflare.com"
 embedded = true
 
 [build]
@@ -13,9 +13,9 @@ include_config_on_deploy = false
 
 [auth]
 redirect_urls = [
-  "https://vestaboard-installables.ue.r.appspot.com/auth/callback",
-  "https://vestaboard-installables.ue.r.appspot.com/auth/shopify/callback",
-  "https://vestaboard-installables.ue.r.appspot.com/api/auth/callback"
+  "https://completed-def-relevance-notify.trycloudflare.com/auth/callback",
+  "https://completed-def-relevance-notify.trycloudflare.com/auth/shopify/callback",
+  "https://completed-def-relevance-notify.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
