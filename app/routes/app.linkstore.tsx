@@ -101,13 +101,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   //console.log('app.linkstore.tsx::action(): str_url_vestaboard_installables = ' + str_url_vestaboard_installables);
   //console.log('app.linkstore.tsx::action(): obj_settings_vestaboard_installables.body = ' + obj_settings_vestaboard_installables.body);
-  //console.log('app.linkstore.tsx::action(): obj_vestaboard_installables_response = ' + obj_vestaboard_installables_response);
+  //console.log('app.linkstore.tsx::action(): obj_vestaboard_installables_response.success = ' + obj_vestaboard_installables_response.success);
+  //console.log('app.linkstore.tsx::action(): obj_vestaboard_installables_response.errors = ' + obj_vestaboard_installables_response.errors[0]);
 
   // Prepare the JSON to be returned to the front-end from this server handler.
   var actionData: ActionData = {
     success: false,
     page_title: "Setup: An Error Occurred",
-    message: "An unknown error occurred.",
+    message: obj_vestaboard_installables_response.errors[0],
     button_title: "Try Again",
   };
   if ( obj_vestaboard_installables_response.success != 1 ) {

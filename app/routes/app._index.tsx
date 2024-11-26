@@ -19,7 +19,7 @@ import {
   TextField,
 } from "@shopify/polaris";
 import { TitleBar, useAppBridge } from "@shopify/app-bridge-react";
-import { getSessionTokenHeader, getSessionTokenFromUrlParam } from '@shopify/app-bridge-remix';
+//import { getSessionTokenHeader, getSessionTokenFromUrlParam } from '@shopify/app-bridge-remix';
 import { PrismaClient } from '@prisma/client'
 import { authenticate } from "../shopify.server";
 
@@ -117,6 +117,9 @@ export default function Index() {
         obj_additional_options.interval_ending_at_time = '18:00';
       }
     }
+
+    const [formState, setFormState] = useState({});
+    const [authorizationCodeErrorState, setAuthorizationCodeErrorState] = useState(false);
 
     // Form settings values
     const [salesSummaryTodayValue, setSalesSummaryTodayValue] = useState((obj_additional_options.display_daily_progress == '1') ? true : false);
@@ -579,6 +582,33 @@ export default function Index() {
               </BlockStack>
 
               <Card>
+                <Form action="/app/linkstore" method="post">
+                  <BlockStack gap="500">
+                    <BlockStack gap="200">
+                      <Text as="h3" variant="headingMd">
+                        Connect Another Vestaboard
+                      </Text>
+
+                      <Text as="p" variant="bodyMd">
+                        This store can be connected to multiple Vestaboards. To do so, enter the Authorization Code for the additional Vestaboard below.
+                      </Text>
+
+                      <TextField label="Authorization Code" name="auth_code" value={formState.auth_code} onChange={(value) => setFormState({ ...formState, auth_code: value })} autoComplete="off" error={authorizationCodeErrorState} />
+                    </BlockStack>
+                    <InlineStack gap="300">
+                      <Button variant="primary" submit={true}>
+                        Submit Authorization Code
+                      </Button>
+                    </InlineStack>
+                  </BlockStack>
+                </Form>
+              </Card>
+
+              <BlockStack gap="500">
+                &nbsp;
+              </BlockStack>
+
+              <Card>
                 <BlockStack gap="500">
                   <BlockStack gap="200">
                     <Text as="h3" variant="headingMd">
@@ -603,9 +633,6 @@ export default function Index() {
     );
   }
   else {
-    const [formState, setFormState] = useState({});
-    const [authorizationCodeErrorState, setAuthorizationCodeErrorState] = useState(false);
-
     return (
       <Page>
         <TitleBar title="Setup: Your Authorization Code" />
