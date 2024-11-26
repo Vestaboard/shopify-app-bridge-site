@@ -633,6 +633,9 @@ export default function Index() {
     );
   }
   else {
+    const [formState, setFormState] = useState({});
+    const [authorizationCodeErrorState, setAuthorizationCodeErrorState] = useState(false);
+
     return (
       <Page>
         <TitleBar title="Setup: Your Authorization Code" />
