@@ -3,7 +3,7 @@
 client_id = "abd2bdb7d6c9b365365f01e24f4dc568"
 name = "Vestaboard"
 handle = "vestaboard"
-application_url = "https://vestaboard-installables.ue.r.appspot.com/"
+application_url = "https://d3b6wfoe517t7i.cloudfront.net/"
 embedded = true
 
 [build]
@@ -13,9 +13,9 @@ include_config_on_deploy = false
 
 [auth]
 redirect_urls = [
-  "https://vestaboard-installables.ue.r.appspot.com/auth/callback",
-  "https://vestaboard-installables.ue.r.appspot.com/auth/shopify/callback",
-  "https://vestaboard-installables.ue.r.appspot.com/api/auth/callback"
+  "https://d3b6wfoe517t7i.cloudfront.net/auth/callback",
+  "https://d3b6wfoe517t7i.cloudfront.net/auth/shopify/callback",
+  "https://d3b6wfoe517t7i.cloudfront.net/api/auth/callback"
 ]
 
 [webhooks]
