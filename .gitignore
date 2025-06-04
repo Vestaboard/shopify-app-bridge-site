@@ -16,3 +16,8 @@ yarn.lock
 .DS_Store
 
 /extensions/*/dist
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
