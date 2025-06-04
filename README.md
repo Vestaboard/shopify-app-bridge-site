@@ -1,74 +1,61 @@
 # Shopify App Bridge for Vestaboard - Remix 2.7.x #
 
-This is a template for building a [Shopify app](https://shopify.dev/docs/apps/getting-started) using the [Remix](https://remix.run) framework.
+This repository contains [Shopify app](https://shopify.dev/docs/apps/getting-started) using the [Remix](https://remix.run) framework. Visit the [`shopify.dev` documentation](https://shopify.dev/docs/api/shopify-app-remix) for more details on the Remix app package.
 
-Rather than cloning this repo, you can use your preferred package manager and the Shopify CLI with [these steps](https://shopify.dev/docs/apps/getting-started/create).
+**Site Environment**
 
-Visit the [`shopify.dev` documentation](https://shopify.dev/docs/api/shopify-app-remix) for more details on the Remix app package.
+Hosting for Shopify App Bridge for Vestaboard is provided by Amazon AWS Cloud.
 
-## Production Environment ##
+Basic site environment:
+
+- Nginx 1.26
+- Node.js 20
+- MySQL 8 (Amazon Aurora Serverless v2)
+
+
+## Production Environment
+
+### Deploying Changes To Production ###
+
+Run the following at the command line to deploy to the web environment:
+
+    eb deploy shopify-vestaboard-web
+
+And ensure that Shopify is pointing to the correct production settings/URLs:
+
+    https://partners.shopify.com/3089951/apps/55389388801/edit
+
+You may be required to execute **eb init** if this is your first attempt to deploy the website to the 
+Elastic Beanstalk server(s); instructions can be found further down in this document.
+
+### Connecting Via SSH ###
+
+Connect via SSH to a production server via a command such as:
+
+    eb ssh shopify-vestaboard-web
+
+You may be required to execute **eb ssh --setup** if this is your first attempt to
+connect via SSH to the Elastic Beanstalk server(s).
+
+### Files ###
+
+The production website, worker and cron (scheduler) have a root folder of:
+
+    /var/app/current/
 
 ### MySQL Database ###
 
-The production website connects to a MySQL 8.0.18 database at: 
+The production website is configured to connect to the MySQL database:
 
-    Host: 10.67.80.3
-    Port: 3306
+    Host: vestaboard-installables.cluster-ci3gyg00w731.us-east-1.rds.amazonaws.com
     Username: root
     Password: ssOsumdOehpnnJPF
     Database: shopify_vestaboard_app_bridge
 
-To connect to MySQL at the command line, first start the Google SQL Cloud Proxy (install 
-if needed at https://cloud.google.com/sql/docs/mysql/sql-proxy ):
-    
-    cloud_sql_proxy --port 33306 vestaboard-installables:us-east1:vestaboard-installables
-
-Then connect normally using the mysql CLI (note use of port 33306):
-    
-    mysql -h 127.0.0.1 -P 33306 -u root -pssOsumdOehpnnJPF -D shopify_vestaboard_app_bridge
-
-### Connecting Via SSH ###
-
-At present this is multiple steps:
-
-1. First, get a list of GAE Flexible machine instances running by visiting App Engine > Instances, or the URL:
-
-  * https://console.cloud.google.com/appengine/instances?serviceId=default&project=vestaboard-installables
-
-2. Next, click the down arrow beside the SSH option and choose "View gcloud command". Copy and run the command on 
-   your CLI.
-
-3. Once SSHed into the GAE Flexible instance, run this CLI command to SSH into the Docker instance of the app:
-      
-      sudo docker exec -it gaeapp /bin/bash
-
-You are now connected and inside the GAE app that was deployed. See the documentation at https://cloud.google.com/appengine/docs/flexible/debugging-an-instance 
-for more information.
-
-### Logging ###
-
-To "tail" logs in real time, run the CLI command:
-
-    gcloud app logs tail -s default
-
-### Deploying ###
-
-To deploy a new version of the site, run the command:
-
-    gcloud app deploy
-
-Next, ensure that Shopify is pointing to the correct production settings/URLs:
-
-    npm run config:link
-
-And instruct Shopify to update to those new production settings and create a new version:
-
-    npm run deploy
-
 
 ## Quick Start ##
 
-### Prerequisites
+### Prerequisites ###
 
 Before you begin, you'll need the following:
 
@@ -76,7 +63,7 @@ Before you begin, you'll need the following:
 2. **Shopify Partner Account**: [Create an account](https://partners.shopify.com/signup) if you don't have one.
 3. **Test Store**: Set up either a [development store](https://help.shopify.com/en/partners/dashboard/development-stores#create-a-development-store) or a [Shopify Plus sandbox store](https://help.shopify.com/en/partners/dashboard/managing-stores/plus-sandbox-store) for testing your app.
 
-### Setup
+### Setup ###
 
 If you used the CLI to create the template, you can skip this section.
 
@@ -86,7 +73,7 @@ Using npm:
 npm install
 ```
 
-### Local Development
+### Local Development ###
 
 Using npm:
 
@@ -98,7 +85,7 @@ Press P to open the URL to your app. Once you click install, you can start devel
 
 Local development is powered by [the Shopify CLI](https://shopify.dev/docs/apps/tools/cli). It logs into your partners account, connects to an app, provides environment variables, updates remote config, creates a tunnel and provides commands to generate extensions.
 
-### Build
+### Build ###
 
 Remix handles building the app for you, by running the command below with the package manager of your choice:
 
@@ -108,7 +95,13 @@ Using npm:
 npm run build
 ```
 
-## Gotchas / Troubleshooting
+## Gotchas / Troubleshooting ##
+
+### I Need To Modify The Shopify App Configuration Settings ###
+
+Log in to the Shopify Partners backend and edit the settings at Build > Configuration:
+
+    URL: https://vestaboard.atlassian.net/wiki/spaces/ED/pages/44531732/
 
 ### I Want To Start Development On A Local Webserver ###
 
@@ -148,7 +141,6 @@ Using npm:
 ```shell
 npm run deploy
 ```
-
 ### My Webhook Subscriptions Aren't Being Updated ###
 
 This template registers webhooks after OAuth completes, using the `afterAuth` hook when calling `shopifyApp`.
