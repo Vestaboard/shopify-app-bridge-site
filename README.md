@@ -19,7 +19,7 @@ Basic site environment:
 
 Run the following at the command line to deploy to the web environment:
 
-    eb deploy shopify-vestaboard-web
+    eb deploy shopify-vestaboard-website
 
 And ensure that Shopify is pointing to the correct production settings/URLs:
 
@@ -32,7 +32,7 @@ Elastic Beanstalk server(s); instructions can be found further down in this docu
 
 Connect via SSH to a production server via a command such as:
 
-    eb ssh shopify-vestaboard-web
+    eb ssh shopify-vestaboard-website
 
 You may be required to execute **eb ssh --setup** if this is your first attempt to
 connect via SSH to the Elastic Beanstalk server(s).
