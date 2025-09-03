@@ -102,24 +102,27 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   //console.log('app.linkstore.tsx::action(): str_url_vestaboard_installables = ' + str_url_vestaboard_installables);
   //console.log('app.linkstore.tsx::action(): obj_settings_vestaboard_installables.body = ' + obj_settings_vestaboard_installables.body);
   //console.log('app.linkstore.tsx::action(): obj_vestaboard_installables_response.success = ' + obj_vestaboard_installables_response.success);
-  //console.log('app.linkstore.tsx::action(): obj_vestaboard_installables_response.errors = ' + obj_vestaboard_installables_response.errors[0]);
+  //console.log('app.linkstore.tsx::action(): obj_vestaboard_installables_response.errors = ' + obj_vestaboard_installables_response.errors);
 
   // Prepare the JSON to be returned to the front-end from this server handler.
-  var actionData: ActionData = {
-    success: false,
-    page_title: "Setup: An Error Occurred",
-    message: obj_vestaboard_installables_response.errors[0],
-    button_title: "Try Again",
-  };
   if ( obj_vestaboard_installables_response.success != 1 ) {
+    var actionData: ActionData = {
+      success: false,
+      page_title: "Setup: An Error Occurred",
+      message: obj_vestaboard_installables_response.errors[0],
+      button_title: "Try Again",
+    };
+
     return json(actionData);
   }
 
   // Update our response object.
-  actionData.success = true;
-  actionData.page_title = 'Setup: Complete';
-  actionData.message = "We've successfully connected to your Vestaboard. Next, click the button below and customize the settings to use to display data from this Shopify store on your Vestaboard smart display.";
-  actionData.button_title = "Customize Settings";
+  var actionData: ActionData = {
+    success: true,
+    page_title: 'Setup: Complete',
+    message: "We've successfully connected to your Vestaboard. Next, click the button below and customize the settings to use to display data from this Shopify store on your Vestaboard smart display.",
+    button_title: "Customize Settings",
+  };
 
   return json(actionData);
 };
