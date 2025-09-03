@@ -10,6 +10,8 @@ if (process.env.NODE_ENV !== "production") {
   if (!global.prisma) {
     global.prisma = new PrismaClient();
   }
+
+  process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 }
 
 export default prisma;
