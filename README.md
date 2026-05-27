@@ -1,4 +1,4 @@
-# Shopify App Bridge for Vestaboard - Remix 2.7.x #
+# Shopify App Bridge for Vestaboard - Remix 2.17.x #
 
 This repository contains [Shopify app](https://shopify.dev/docs/apps/getting-started) using the [Remix](https://remix.run) framework. Visit the [`shopify.dev` documentation](https://shopify.dev/docs/api/shopify-app-remix) for more details on the Remix app package.
 
@@ -8,8 +8,8 @@ Hosting for Shopify App Bridge for Vestaboard is provided by Amazon AWS Cloud.
 
 Basic site environment:
 
-- Nginx 1.26
-- Node.js 20
+- Nginx 1.30
+- Node.js 24
 - MySQL 8 (Amazon Aurora Serverless v2)
 
 
@@ -96,6 +96,16 @@ npm run build
 ```
 
 ## Gotchas / Troubleshooting ##
+
+### I Can't Start The Local Webserver ###
+
+During the installation of NodeJS or the Shopify CLI, folders/files may have been installed as root instead of the 
+user account you're currently using. To fix this, you can change the ownership of the relevant folders/files in this 
+project (node_modules/ and .shopify/ specificaly if needed) by doing the following:
+
+    sudo chown -R $(whoami) ./
+
+Once completed, re-run the build and dev commands as shown above.
 
 ### I Need To Modify The Shopify App Configuration Settings ###
 
