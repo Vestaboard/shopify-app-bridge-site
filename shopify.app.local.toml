@@ -19,7 +19,7 @@ redirect_urls = [
 ]
 
 [webhooks]
-api_version = "2023-07"
+api_version = "2025-10"
 
   [[webhooks.subscriptions]]
   uri = "https://f31e349e.installables.vbrd.net/api/shopify/events/customers_data_request"
