@@ -48,8 +48,7 @@ The production website, worker and cron (scheduler) have a root folder of:
 The production website is configured to connect to the MySQL database:
 
     Host: vestaboard-installables.cluster-ci3gyg00w731.us-east-1.rds.amazonaws.com
-    Username: root
-    Password: ssOsumdOehpnnJPF
+    Username: shopify-vestaboard-app-bridge
     Database: shopify_vestaboard_app_bridge
 
 
